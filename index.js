@@ -22,6 +22,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 console.log(uri);
+
 async function run() {
   try {
     await client.connect();
@@ -42,26 +43,45 @@ async function run() {
     }); */
 
     //simple post
-     app.post("/result", async (req, res) => {
+    app.post("/result", async (req, res) => {
       const data = req.body;
-      console.log(data.year);
-      /* try {
-        const email = req.body.email;
-        const password = req.body.password;
-        const userEmail = await userCollection.findOne({email: email});
+      const roll = parseInt(data.roll);
+      const regNo = parseInt(data.ragistration);
+      const examination = data.examinition;
+      const board = data.board;
+      const year = parseInt(data.year);
 
-        // authentication
-        if(userEmail.password === password){
-          res.status(200).send({message:"Login success"});
-          console.log('su');
-        }else{
-          res.status(201).send({message:"Invalid password"});
-          console.log('pas');
+      console.log(roll, regNo, examination, board, year);
+
+      const singleResult = await resultCollection.findOne({ roll: roll });
+
+      console.log(singleResult);
+
+      console.log(
+        "signle data",
+        singleResult?.roll,
+        singleResult?.ragistration,
+        singleResult?.examinition,
+        singleResult?.board,
+        singleResult?.year
+      );
+
+      if (singleResult) {
+        if (
+          roll == singleResult?.roll &&
+          regNo == singleResult?.ragistration &&
+          examination == singleResult?.examinition &&
+          board == singleResult?.board &&
+          year == singleResult?.year
+        ) {
+          res.status(200).send(singleResult);
+          console.log("tik ace");
+        } else {
+          console.log("tik nai");
         }
-      } catch {
-        res.status(500).send({ message: "login falid" });
-        console.log('em');
-      } */
+      } else {
+        console.log("no data found");
+      }
     });
   } finally {
     //   await client.close();
