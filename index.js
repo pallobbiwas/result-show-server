@@ -77,10 +77,10 @@ async function run() {
           res.status(200).send(singleResult);
           console.log("tik ace");
         } else {
-          console.log("tik nai");
+          res.status(500).send({ message: "No result found 😂" });
         }
       } else {
-        console.log("no data found");
+        res.status(500).send({ message: "No result found 😂" });
       }
     });
   } finally {
